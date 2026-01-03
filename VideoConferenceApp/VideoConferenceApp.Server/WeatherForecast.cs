@@ -1,4 +1,4 @@
-namespace VideoConferenceApp.Api
+namespace VideoConferenceApp.Server
 {
     public class WeatherForecast
     {
