@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoConferenceApp.Shared", "VideoConferenceApp.Shared\VideoConferenceApp.Shared.csproj", "{2CCA06B4-B140-4533-9BE4-A1352817AE00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoConferenceApp.Server", "VideoConferenceApp.Api\VideoConferenceApp.Server.csproj", "{DF7FF67F-431A-4160-8106-707DBF06D8F4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoConferenceApp.Client", "VideoConferenceApp.Client\VideoConferenceApp.Client.csproj", "{287E0E46-34D3-4B5F-8E65-0F09EA6816BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoConferenceApp.Server", "VideoConferenceApp.Server\VideoConferenceApp.Server.csproj", "{830A0498-EC2A-4A3D-AFEB-A883546A261D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{2CCA06B4-B140-4533-9BE4-A1352817AE00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CCA06B4-B140-4533-9BE4-A1352817AE00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CCA06B4-B140-4533-9BE4-A1352817AE00}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF7FF67F-431A-4160-8106-707DBF06D8F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF7FF67F-431A-4160-8106-707DBF06D8F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF7FF67F-431A-4160-8106-707DBF06D8F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF7FF67F-431A-4160-8106-707DBF06D8F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{287E0E46-34D3-4B5F-8E65-0F09EA6816BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{287E0E46-34D3-4B5F-8E65-0F09EA6816BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{287E0E46-34D3-4B5F-8E65-0F09EA6816BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{287E0E46-34D3-4B5F-8E65-0F09EA6816BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{830A0498-EC2A-4A3D-AFEB-A883546A261D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{830A0498-EC2A-4A3D-AFEB-A883546A261D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{830A0498-EC2A-4A3D-AFEB-A883546A261D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{830A0498-EC2A-4A3D-AFEB-A883546A261D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
