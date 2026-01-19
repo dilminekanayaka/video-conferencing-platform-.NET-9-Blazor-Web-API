@@ -1,0 +1,144 @@
+﻿
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using VideoConferenceApp.Client.States
+@using VideoConferenceApp.Shared.Meeting.Responses
+@using VideoConferenceApp.Shared.Meeting.Requests
+
+@implements IDisposable
+
+@code {
+
+    bool IsMeetingModalOpen = false;
+    string ModalMessage = string.Empty;
+    string RecentMeetingStatus = string.Empty;
+    string MeetingStatus = string.Empty;
+
+    bool IsModalMessageOpen = false;
+    bool ShowLoader = false;
+    MeetingModel Meeting = new();
+
+    [Inject] NavState? navState { get; set; }
+    [CascadingParameter] Task<AuthenticationState>? AuthState { get; set; }
+
+    IEnumerable<GetMeeting> Meetings = [];
+    IEnumerable<GetMeeting> RecentMeetings = [];
+
+    string HostId = string.Empty;
+
+    protected async override Task OnInitializedAsync()
+    {
+        //check for authentication
+        if (!(await AuthState!).User.Identity!.IsAuthenticated)
+            NavManager.NavigateTo("/");
+
+        navState!.ButtonAction += ScheduleMeeting;
+        ShowLoader = true;
+        await Task.Delay(500);
+
+        // get user id
+        HostId = (await AuthState!).User.Claims
+        .FirstOrDefault(_ => _.Type == ClaimTypes.NameIdentifier)!.Value;
+
+        if (string.IsNullOrEmpty(HostId)) return;
+
+        await GetMeetings();
+        await GetRecentMeetings();
+        ShowLoader = false;
+
+    }
+
+    void ScheduleMeeting() => OpenModal();
+    void OpenModal() => IsMeetingModalOpen = true;
+    void Ok()
+    {
+        IsModalMessageOpen = false;
+        StateHasChanged();
+    }
+
+    async Task GetMeetings()
+    {
+        //Get meetings
+        GetMeetingsResponse? meetingResponse = await meetingService.GetMeetings(HostId);
+        if (meetingResponse!.IsSuccess)
+            Meetings = meetingResponse.Data;
+        else
+            MeetingStatus = meetingResponse.Message!;
+    }
+
+    async Task GetRecentMeetings()
+    {
+        //get recent meetingss
+        GetRecentMeetingsResponse? recentMeetingResponse = await meetingService.GetRecentMeetings(HostId);
+        if (recentMeetingResponse!.IsSuccess)
+            RecentMeetings = recentMeetingResponse.Data;
+        else
+            RecentMeetingStatus = recentMeetingResponse.Message!; 
+    }
+
+    async Task SubmitMeeting()
+    {
+        IsMeetingModalOpen = false;
+        ShowLoader = true;
+        await Task.Delay(500);
+
+        CreateMeetingRequest meeting = new()
+        {
+            Description = Meeting.Description,
+            Title = Meeting.Title,
+            HostId = (await AuthState!).User.Claims
+                            .FirstOrDefault(_ => _.Type == ClaimTypes.NameIdentifier)!.Value,
+            EndDateOnly = DateOnly.FromDateTime(Meeting.EndDate!.Value).ToString(),
+            EndTimeOnly = TimeOnly.FromDateTime(Meeting.EndTime!.Value).ToString(),
+            StartDateOnly = DateOnly.FromDateTime(Meeting.StartDate!.Value).ToString(),
+            StartTimeOnly = TimeOnly.FromDateTime(Meeting.StartTime!.Value).ToString()
+        };
+
+        CreateMeetingResponse? response = await meetingService.CreateMeeting(meeting);
+
+        //set modal message 
+        ModalMessage = response!.Message!;
+
+        if (response!.IsSuccess)
+        {
+            //clear both containers
+            Meeting = new();
+            meeting = new();
+            await GetMeetings();
+        }
+
+        //hide modal and loader
+        ShowLoader = false;
+
+        //show message
+        IsModalMessageOpen = true;
+
+        //notify page
+        StateHasChanged();
+
+    }
+
+    void CancelMeetingCreate() => IsMeetingModalOpen = false;
+
+    void ResetMeetingForm() => Meeting = new();
+
+    async Task StartMeeting(string meetingId)
+    {
+        ShowLoader = true;
+        await Task.Delay(500);
+        NavManager.NavigateTo($"/meeting/{meetingId}");
+    }
+
+    class MeetingModel
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public DateTime? StartDate { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime? EndTime { get; set; }
+
+    }
+
+    public void Dispose() => navState!.ButtonAction -= ScheduleMeeting;
+}
